@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import CardList from './components/CardList';
-import Filter, { Status } from './components/Filter';
+import { useState } from "react";
+import CardList from "./components/CardList";
+import Filter, { Status } from "./components/Filter";
+import Header from "./components/Header";
 
 interface IFilter {
   name: string;
@@ -8,17 +9,33 @@ interface IFilter {
 }
 
 function App() {
-  const [filter, setFilter] = useState<IFilter>({ name: '', status: Status.UNKNOWN });
+  const [filter, setFilter] = useState<IFilter>({
+    name: "",
+    status: Status.DEFAULT,
+  });
+  const [page, setPage] = useState<number>(1);
+
+  const handlePageChange = (page: number) => {
+    setPage(page);
+  };
 
   const handleFilterChange = (filter: IFilter) => {
+    setPage(1)
     setFilter(filter);
   };
+
   return (
-    <>
-    <h1>Rick and Morty</h1>
+    <div className="bg-zinc-900 h-full">
+      <Header />
       <Filter onFilterChange={handleFilterChange} />
-      <CardList filter={filter}/>
-    </>
+      <div className="container mx-auto pt-20">
+        <CardList
+          filter={filter}
+          handlePageChange={handlePageChange}
+          page={page}
+        />
+      </div>
+    </div>
   );
 }
 
